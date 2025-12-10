@@ -33,36 +33,6 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
     formState: { errors },
   } = useForm<FormInputs>();
 
-  const validateForm = (data: FormInputs) => {
-    const newErrors: Record<string, string> = {};
-    
-    if (!data.firstName.trim()) {
-      newErrors.firstName = t.form.errors.firstNameRequired;
-    } else if (data.firstName.length > 50) {
-      newErrors.firstName = t.form.errors.firstNameTooLong;
-    }
-    
-    if (!data.lastName.trim()) {
-      newErrors.lastName = t.form.errors.lastNameRequired;
-    } else if (data.lastName.length > 50) {
-      newErrors.lastName = t.form.errors.lastNameTooLong;
-    }
-    
-    if (!data.phone.trim()) {
-      newErrors.phone = t.form.errors.phoneRequired;
-    } else if (!/^[\d\s\+\-\(\)]+$/.test(data.phone)) {
-      newErrors.phone = t.form.errors.phoneInvalid;
-    }
-    
-    if (!data.email.trim()) {
-      newErrors.email = t.form.errors.emailRequired;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-      newErrors.email = t.form.errors.emailInvalid;
-    }
-    
-    return newErrors;
-  };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     setFileError(null);
@@ -78,11 +48,6 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
   };
 
   const onSubmit = async (data: FormInputs) => {
-    const validationErrors = validateForm(data);
-    if (Object.keys(validationErrors).length > 0) {
-      return;
-    }
-
     setIsSubmitting(true);
     setServerErrors({});
 
@@ -96,9 +61,7 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
         formData.append("license", file);
       }
 
-      // Mock API response - In production, replace with actual API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
-
       onSubmitSuccess(data);
     } catch (error) {
       console.error("Submission error:", error);
@@ -112,111 +75,104 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
       <div className="grid gap-5 sm:grid-cols-2">
         {/* First Name */}
         <div className="space-y-2">
-          <Label htmlFor="firstName" className="text-sm font-semibold text-foreground">
+          <Label htmlFor="firstName" className="text-sm font-medium text-slate-300">
             {t.form.firstName} {t.form.required}
           </Label>
           <div className="relative">
-            <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
             <Input
               id="firstName"
               placeholder={t.form.placeholders.firstName}
-              className="pl-11"
-              error={!!errors.firstName}
+              className="pl-11 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-emerald-500/50 focus:ring-emerald-500/20"
               {...register("firstName", { required: t.form.errors.firstNameRequired })}
             />
           </div>
           {errors.firstName && (
-            <p className="text-sm text-destructive">{errors.firstName.message}</p>
+            <p className="text-sm text-red-400">{errors.firstName.message}</p>
           )}
         </div>
 
         {/* Last Name */}
         <div className="space-y-2">
-          <Label htmlFor="lastName" className="text-sm font-semibold text-foreground">
+          <Label htmlFor="lastName" className="text-sm font-medium text-slate-300">
             {t.form.lastName} {t.form.required}
           </Label>
           <div className="relative">
-            <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
             <Input
               id="lastName"
               placeholder={t.form.placeholders.lastName}
-              className="pl-11"
-              error={!!errors.lastName}
+              className="pl-11 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-emerald-500/50 focus:ring-emerald-500/20"
               {...register("lastName", { required: t.form.errors.lastNameRequired })}
             />
           </div>
           {errors.lastName && (
-            <p className="text-sm text-destructive">{errors.lastName.message}</p>
+            <p className="text-sm text-red-400">{errors.lastName.message}</p>
           )}
         </div>
       </div>
 
       {/* Phone */}
       <div className="space-y-2">
-        <Label htmlFor="phone" className="text-sm font-semibold text-foreground">
+        <Label htmlFor="phone" className="text-sm font-medium text-slate-300">
           {t.form.phone} {t.form.required}
         </Label>
         <div className="relative">
-          <Phone className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Phone className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
           <Input
             id="phone"
             type="tel"
             placeholder={t.form.placeholders.phone}
-            className="pl-11"
-            error={!!errors.phone || !!serverErrors.phone}
+            className="pl-11 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-emerald-500/50 focus:ring-emerald-500/20"
             {...register("phone", { required: t.form.errors.phoneRequired })}
           />
         </div>
-        {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
-        {serverErrors.phone && (
-          <p className="text-sm text-destructive">{serverErrors.phone}</p>
-        )}
+        {errors.phone && <p className="text-sm text-red-400">{errors.phone.message}</p>}
+        {serverErrors.phone && <p className="text-sm text-red-400">{serverErrors.phone}</p>}
       </div>
 
       {/* Email */}
       <div className="space-y-2">
-        <Label htmlFor="email" className="text-sm font-semibold text-foreground">
+        <Label htmlFor="email" className="text-sm font-medium text-slate-300">
           {t.form.email} {t.form.required}
         </Label>
         <div className="relative">
-          <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
           <Input
             id="email"
             type="email"
             placeholder={t.form.placeholders.email}
-            className="pl-11"
-            error={!!errors.email || !!serverErrors.email}
+            className="pl-11 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-emerald-500/50 focus:ring-emerald-500/20"
             {...register("email", { required: t.form.errors.emailRequired })}
           />
         </div>
-        {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-        {serverErrors.email && (
-          <p className="text-sm text-destructive">{serverErrors.email}</p>
-        )}
+        {errors.email && <p className="text-sm text-red-400">{errors.email.message}</p>}
+        {serverErrors.email && <p className="text-sm text-red-400">{serverErrors.email}</p>}
       </div>
 
       {/* License Upload */}
       <div className="space-y-2">
-        <Label htmlFor="license" className="text-sm font-semibold text-foreground">
+        <Label htmlFor="license" className="text-sm font-medium text-slate-300">
           {t.form.license}
         </Label>
         <label
           htmlFor="license"
           className={cn(
-            "flex cursor-pointer items-center justify-center gap-3 rounded-lg border-2 border-dashed p-6 transition-all duration-200 hover:border-primary hover:bg-primary/5",
-            fileError ? "border-destructive" : "border-input",
-            file && "border-success bg-success/5"
+            "flex cursor-pointer items-center justify-center gap-3 rounded-xl border-2 border-dashed p-6 transition-all duration-200",
+            "bg-white/5 hover:bg-white/10 hover:border-emerald-500/50",
+            fileError ? "border-red-500/50" : "border-white/10",
+            file && "border-emerald-500/50 bg-emerald-500/10"
           )}
         >
           {file ? (
             <>
-              <CheckCircle className="h-5 w-5 text-success" />
-              <span className="text-sm font-medium text-foreground">{file.name}</span>
+              <CheckCircle className="h-5 w-5 text-emerald-400" />
+              <span className="text-sm font-medium text-white">{file.name}</span>
             </>
           ) : (
             <>
-              <Upload className="h-5 w-5 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">
+              <Upload className="h-5 w-5 text-slate-500" />
+              <span className="text-sm text-slate-400">
                 {t.form.licenseUpload}
               </span>
             </>
@@ -229,15 +185,14 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
             onChange={handleFileChange}
           />
         </label>
-        {fileError && <p className="text-sm text-destructive">{fileError}</p>}
+        {fileError && <p className="text-sm text-red-400">{fileError}</p>}
       </div>
 
       {/* Submit Button */}
       <Button
         type="submit"
-        variant="brand"
         size="lg"
-        className="w-full"
+        className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:shadow-emerald-500/40"
         disabled={isSubmitting}
       >
         {isSubmitting ? (

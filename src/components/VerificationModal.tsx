@@ -72,19 +72,19 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-[#0f1520] border-white/10">
         <DialogHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary shadow-md">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 shadow-lg shadow-emerald-500/25">
             {isVerified ? (
-              <CheckCircle2 className="h-8 w-8 text-primary-foreground" />
+              <CheckCircle2 className="h-8 w-8 text-white" />
             ) : (
-              <Phone className="h-8 w-8 text-primary-foreground" />
+              <Phone className="h-8 w-8 text-white" />
             )}
           </div>
-          <DialogTitle className="text-xl font-bold text-foreground">
+          <DialogTitle className="text-xl font-bold text-white">
             {isVerified ? t.verification.titleSuccess : t.verification.title}
           </DialogTitle>
-          <DialogDescription className="text-muted-foreground">
+          <DialogDescription className="text-slate-400">
             {isVerified
               ? t.verification.subtitleSuccess
               : `${t.verification.subtitle} ${phone}`}
@@ -107,7 +107,7 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
                     <InputOTPSlot
                       key={index}
                       index={index}
-                      className="h-12 w-12 rounded-lg border-2 border-input text-lg font-bold transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      className="h-12 w-12 rounded-lg border-2 border-white/10 bg-white/5 text-lg font-bold text-white transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                     />
                   ))}
                 </InputOTPGroup>
@@ -115,13 +115,12 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
             </div>
 
             {error && (
-              <p className="text-center text-sm text-destructive animate-fade-up">{error}</p>
+              <p className="text-center text-sm text-red-400 animate-fade-up">{error}</p>
             )}
 
             <Button
-              variant="brand"
               size="lg"
-              className="w-full"
+              className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold"
               onClick={handleVerify}
               disabled={isVerifying || code.length !== 6}
             >
@@ -140,7 +139,7 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
                 type="button"
                 onClick={handleResend}
                 disabled={isResending}
-                className="text-sm font-medium text-primary hover:underline disabled:opacity-50"
+                className="text-sm font-medium text-emerald-400 hover:text-emerald-300 disabled:opacity-50 transition-colors"
               >
                 {isResending ? t.verification.resending : t.verification.resend}
               </button>
@@ -148,7 +147,11 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
           </div>
         ) : (
           <div className="pt-4">
-            <Button variant="brand" size="lg" className="w-full" onClick={handleClose}>
+            <Button
+              size="lg"
+              className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold"
+              onClick={handleClose}
+            >
               {t.verification.continue}
             </Button>
           </div>

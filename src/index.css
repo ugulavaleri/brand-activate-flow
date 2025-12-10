@@ -6,57 +6,56 @@
 
 @layer base {
   :root {
-    /* MartEV Brand Colors - Vibrant Electric Theme */
-    --background: 210 30% 98%;
-    --foreground: 220 25% 12%;
+    /* MartEV Brand Colors - Clean Green EV Theme */
+    --background: 0 0% 100%;
+    --foreground: 220 15% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 12%;
+    --card-foreground: 220 15% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 12%;
+    --popover-foreground: 220 15% 15%;
 
-    /* Primary - Electric Teal #00C9D4 */
-    --primary: 184 100% 42%;
+    /* Primary - Electric Green #22C55E */
+    --primary: 142 71% 45%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Electric Blue #0066FF */
-    --secondary: 220 100% 50%;
+    /* Secondary - Dark Slate */
+    --secondary: 220 15% 20%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Accent - Vibrant Orange #FF7A2E */
-    --accent: 22 100% 59%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent - Lime Green */
+    --accent: 84 85% 50%;
+    --accent-foreground: 220 15% 15%;
 
-    /* Brand Electric Blue */
-    --brand-blue: 200 100% 50%;
+    /* Brand Dark */
+    --brand-dark: 220 15% 12%;
 
-    --muted: 210 25% 95%;
-    --muted-foreground: 220 15% 40%;
+    --muted: 210 15% 96%;
+    --muted-foreground: 220 10% 45%;
 
     --destructive: 0 85% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 155 70% 45%;
+    --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
 
-    --border: 210 25% 88%;
-    --input: 210 25% 90%;
-    --ring: 184 100% 42%;
+    --border: 220 15% 90%;
+    --input: 220 15% 92%;
+    --ring: 142 71% 45%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    /* Vibrant Brand Gradients */
-    --gradient-brand: linear-gradient(135deg, hsl(184, 100%, 42%) 0%, hsl(220, 100%, 50%) 50%, hsl(22, 100%, 59%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(200, 100%, 50%) 0%, hsl(184, 100%, 42%) 100%);
-    --gradient-button: linear-gradient(135deg, hsl(184, 100%, 45%) 0%, hsl(200, 100%, 50%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(22, 100%, 59%) 0%, hsl(35, 100%, 55%) 100%);
+    /* Green Gradients */
+    --gradient-brand: linear-gradient(135deg, hsl(142, 71%, 45%) 0%, hsl(84, 85%, 50%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(220, 15%, 12%) 0%, hsl(220, 15%, 18%) 100%);
+    --gradient-button: linear-gradient(135deg, hsl(142, 71%, 45%) 0%, hsl(142, 71%, 40%) 100%);
     
-    /* Enhanced Shadows */
-    --shadow-sm: 0 2px 8px hsl(184 100% 42% / 0.12);
-    --shadow-md: 0 8px 24px hsl(184 100% 42% / 0.18);
-    --shadow-lg: 0 16px 48px hsl(184 100% 42% / 0.25);
-    --shadow-glow: 0 0 50px hsl(184 100% 42% / 0.35);
+    /* Shadows */
+    --shadow-sm: 0 2px 8px hsl(142 71% 45% / 0.1);
+    --shadow-md: 0 8px 24px hsl(142 71% 45% / 0.15);
+    --shadow-lg: 0 16px 48px hsl(142 71% 45% / 0.2);
+    --shadow-glow: 0 0 40px hsl(142 71% 45% / 0.3);
   }
 
   .dark {

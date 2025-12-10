@@ -3,8 +3,8 @@ import logo from "@/assets/martev-logo.svg";
 
 export function Footer() {
   return (
-    <footer className="border-t border-primary/20 bg-gradient-to-b from-background to-muted/50">
-      <div className="container mx-auto px-6 py-12">
+    <footer className="border-t border-border bg-muted">
+      <div className="container mx-auto px-6 py-10">
         <div className="grid gap-8 md:grid-cols-2">
           {/* Company Info */}
           <div className="space-y-4">
@@ -48,7 +48,7 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 border-t border-primary/20 pt-6">
+        <div className="mt-8 border-t border-border pt-6">
           <p className="text-center text-sm text-muted-foreground">
             © {new Date().getFullYear()} MartEV. All rights reserved.
           </p>

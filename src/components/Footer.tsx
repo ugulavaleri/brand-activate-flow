@@ -1,7 +1,10 @@
 import { Mail, Phone, Globe } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import logo from "@/assets/martev-logo.svg";
 
 export function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="border-t border-border bg-muted">
       <div className="container mx-auto px-6 py-10">
@@ -10,13 +13,13 @@ export function Footer() {
           <div className="space-y-4">
             <img src={logo} alt="MartEV Logo" className="h-10 w-auto" />
             <p className="text-sm text-muted-foreground">
-              შენი გზა მარტEVია — ელექტროგასამართი სადგურების ინფრასტრუქტურა თბილისის მასშტაბით.
+              {t.footer.description}
             </p>
           </div>
 
           {/* Contact Information */}
           <div className="space-y-4">
-            <h3 className="font-bold text-foreground">კონტაქტი</h3>
+            <h3 className="font-bold text-foreground">{t.footer.contact}</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <Phone className="h-5 w-5 shrink-0 text-primary" />
@@ -24,7 +27,7 @@ export function Footer() {
                   href="tel:+995322000000"
                   className="text-sm text-muted-foreground transition-colors hover:text-primary"
                 >
-                  დაგვიკავშირდით
+                  {t.footer.callUs}
                 </a>
               </div>
               <div className="flex items-center gap-3">
@@ -52,9 +55,9 @@ export function Footer() {
 
           {/* App Download */}
           <div className="space-y-4">
-            <h3 className="font-bold text-foreground">გადმოწერე აპლიკაცია</h3>
+            <h3 className="font-bold text-foreground">{t.footer.downloadApp}</h3>
             <p className="text-sm text-muted-foreground">
-              მარტEV აპლიკაცია ხელმისაწვდომია iOS და Android პლატფორმებზე.
+              {t.footer.appDescription}
             </p>
             <div className="flex gap-3">
               <a
@@ -81,7 +84,7 @@ export function Footer() {
         {/* Copyright */}
         <div className="mt-8 border-t border-border pt-6">
           <p className="text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} MartEV. ყველა უფლება დაცულია.
+            © {new Date().getFullYear()} MartEV. {t.footer.copyright}
           </p>
         </div>
       </div>

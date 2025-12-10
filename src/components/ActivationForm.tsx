@@ -1,32 +1,27 @@
 import { useState } from "react";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Upload, User, Mail, Phone, Loader2, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
-const formSchema = z.object({
-  firstName: z.string().min(1, "სახელი აუცილებელია").max(50, "სახელი ძალიან გრძელია"),
-  lastName: z.string().min(1, "გვარი აუცილებელია").max(50, "გვარი ძალიან გრძელია"),
-  phone: z
-    .string()
-    .min(1, "ტელეფონის ნომერი აუცილებელია")
-    .regex(/^[\d\s\+\-\(\)]+$/, "ტელეფონის ნომერი არასწორია"),
-  email: z.string().min(1, "ელ. ფოსტა აუცილებელია").email("გთხოვთ შეიყვანოთ სწორი ელ. ფოსტა"),
-});
-
-type FormData = z.infer<typeof formSchema>;
+interface FormInputs {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+}
 
 interface ActivationFormProps {
-  onSubmitSuccess: (data: FormData) => void;
+  onSubmitSuccess: (data: FormInputs) => void;
 }
 
 export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
+  const { t } = useLanguage();
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,9 +31,37 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-  });
+  } = useForm<FormInputs>();
+
+  const validateForm = (data: FormInputs) => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!data.firstName.trim()) {
+      newErrors.firstName = t.form.errors.firstNameRequired;
+    } else if (data.firstName.length > 50) {
+      newErrors.firstName = t.form.errors.firstNameTooLong;
+    }
+    
+    if (!data.lastName.trim()) {
+      newErrors.lastName = t.form.errors.lastNameRequired;
+    } else if (data.lastName.length > 50) {
+      newErrors.lastName = t.form.errors.lastNameTooLong;
+    }
+    
+    if (!data.phone.trim()) {
+      newErrors.phone = t.form.errors.phoneRequired;
+    } else if (!/^[\d\s\+\-\(\)]+$/.test(data.phone)) {
+      newErrors.phone = t.form.errors.phoneInvalid;
+    }
+    
+    if (!data.email.trim()) {
+      newErrors.email = t.form.errors.emailRequired;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      newErrors.email = t.form.errors.emailInvalid;
+    }
+    
+    return newErrors;
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -46,7 +69,7 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
 
     if (selectedFile) {
       if (selectedFile.size > MAX_FILE_SIZE) {
-        setFileError("ფაილის ზომა არ უნდა აღემატებოდეს 10 MB-ს");
+        setFileError(t.form.errors.fileTooLarge);
         setFile(null);
         return;
       }
@@ -54,12 +77,16 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
     }
   };
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: FormInputs) => {
+    const validationErrors = validateForm(data);
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
     setIsSubmitting(true);
     setServerErrors({});
 
     try {
-      // Simulate API call - Replace with actual API endpoint
       const formData = new FormData();
       formData.append("firstName", data.firstName);
       formData.append("lastName", data.lastName);
@@ -69,15 +96,8 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
         formData.append("license", file);
       }
 
-      // Mock API response - In production, replace with:
-      // const response = await fetch('/activation-request', { method: 'POST', body: formData });
-      // const result = await response.json();
-      
+      // Mock API response - In production, replace with actual API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Mock server validation errors (uncomment to test)
-      // setServerErrors({ phone: "This phone number is already registered." });
-      // setServerErrors({ email: "This email is already registered." });
 
       onSubmitSuccess(data);
     } catch (error) {
@@ -93,16 +113,16 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
         {/* First Name */}
         <div className="space-y-2">
           <Label htmlFor="firstName" className="text-sm font-semibold text-foreground">
-            სახელი *
+            {t.form.firstName} {t.form.required}
           </Label>
           <div className="relative">
             <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="firstName"
-              placeholder="გიორგი"
+              placeholder={t.form.placeholders.firstName}
               className="pl-11"
               error={!!errors.firstName}
-              {...register("firstName")}
+              {...register("firstName", { required: t.form.errors.firstNameRequired })}
             />
           </div>
           {errors.firstName && (
@@ -113,16 +133,16 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
         {/* Last Name */}
         <div className="space-y-2">
           <Label htmlFor="lastName" className="text-sm font-semibold text-foreground">
-            გვარი *
+            {t.form.lastName} {t.form.required}
           </Label>
           <div className="relative">
             <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="lastName"
-              placeholder="ბერიძე"
+              placeholder={t.form.placeholders.lastName}
               className="pl-11"
               error={!!errors.lastName}
-              {...register("lastName")}
+              {...register("lastName", { required: t.form.errors.lastNameRequired })}
             />
           </div>
           {errors.lastName && (
@@ -134,17 +154,17 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
       {/* Phone */}
       <div className="space-y-2">
         <Label htmlFor="phone" className="text-sm font-semibold text-foreground">
-          ტელეფონის ნომერი *
+          {t.form.phone} {t.form.required}
         </Label>
         <div className="relative">
           <Phone className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             id="phone"
             type="tel"
-            placeholder="+995 5XX XXX XXX"
+            placeholder={t.form.placeholders.phone}
             className="pl-11"
             error={!!errors.phone || !!serverErrors.phone}
-            {...register("phone")}
+            {...register("phone", { required: t.form.errors.phoneRequired })}
           />
         </div>
         {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
@@ -156,17 +176,17 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
       {/* Email */}
       <div className="space-y-2">
         <Label htmlFor="email" className="text-sm font-semibold text-foreground">
-          ელ. ფოსტა *
+          {t.form.email} {t.form.required}
         </Label>
         <div className="relative">
           <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             id="email"
             type="email"
-            placeholder="example@email.com"
+            placeholder={t.form.placeholders.email}
             className="pl-11"
             error={!!errors.email || !!serverErrors.email}
-            {...register("email")}
+            {...register("email", { required: t.form.errors.emailRequired })}
           />
         </div>
         {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
@@ -178,7 +198,7 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
       {/* License Upload */}
       <div className="space-y-2">
         <Label htmlFor="license" className="text-sm font-semibold text-foreground">
-          მართვის მოწმობა
+          {t.form.license}
         </Label>
         <label
           htmlFor="license"
@@ -197,7 +217,7 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
             <>
               <Upload className="h-5 w-5 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">
-                ატვირთეთ მართვის მოწმობა (მაქს. 10 MB)
+                {t.form.licenseUpload}
               </span>
             </>
           )}
@@ -223,10 +243,10 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            მიმდინარეობს...
+            {t.form.submitting}
           </>
         ) : (
-          "რეგისტრაცია"
+          t.form.submit
         )}
       </Button>
     </form>

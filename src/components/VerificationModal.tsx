@@ -1,7 +1,4 @@
 import { useState } from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogContent,
@@ -12,12 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Loader2, CheckCircle2, Phone } from "lucide-react";
-
-const codeSchema = z.object({
-  code: z.string().length(6, "გთხოვთ შეიყვანოთ 6-ციფრიანი კოდი"),
-});
-
-type CodeFormData = z.infer<typeof codeSchema>;
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface VerificationModalProps {
   open: boolean;
@@ -26,6 +18,7 @@ interface VerificationModalProps {
 }
 
 export function VerificationModal({ open, onOpenChange, phone }: VerificationModalProps) {
+  const { t } = useLanguage();
   const [code, setCode] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
@@ -34,7 +27,7 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
 
   const handleVerify = async () => {
     if (code.length !== 6) {
-      setError("გთხოვთ შეიყვანოთ 6-ციფრიანი კოდი");
+      setError(t.verification.codeError);
       return;
     }
 
@@ -42,22 +35,15 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
     setError(null);
 
     try {
-      // Mock API call - Replace with actual endpoint
-      // const response = await fetch('/verify-phone', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ phone, code }),
-      // });
-
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      // Mock verification - in production check response
       if (code === "123456") {
         setIsVerified(true);
       } else {
-        setError("კოდი არასწორია. გთხოვთ სცადოთ ხელახლა.");
+        setError(t.verification.incorrectCode);
       }
     } catch (err) {
-      setError("ვერიფიკაცია ვერ მოხერხდა. გთხოვთ სცადოთ ხელახლა.");
+      setError(t.verification.verifyFailed);
     } finally {
       setIsVerifying(false);
     }
@@ -68,13 +54,10 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
     setError(null);
 
     try {
-      // Mock API call - Replace with actual endpoint
-      // await fetch('/resend-code', { method: 'POST', body: JSON.stringify({ phone }) });
-
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setCode("");
     } catch (err) {
-      setError("კოდის ხელახლა გაგზავნა ვერ მოხერხდა.");
+      setError(t.verification.resendFailed);
     } finally {
       setIsResending(false);
     }
@@ -99,12 +82,12 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
             )}
           </div>
           <DialogTitle className="text-xl font-bold text-foreground">
-            {isVerified ? "ტელეფონი დადასტურებულია!" : "დაადასტურე ტელეფონი"}
+            {isVerified ? t.verification.titleSuccess : t.verification.title}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
             {isVerified
-              ? "თქვენი ტელეფონის ნომერი წარმატებით დადასტურდა."
-              : `ვერიფიკაციის კოდი გაიგზავნა ნომერზე ${phone}`}
+              ? t.verification.subtitleSuccess
+              : `${t.verification.subtitle} ${phone}`}
           </DialogDescription>
         </DialogHeader>
 
@@ -145,10 +128,10 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
               {isVerifying ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  მოწმდება...
+                  {t.verification.verifying}
                 </>
               ) : (
-                "ნომრის დადასტურება"
+                t.verification.verify
               )}
             </Button>
 
@@ -159,14 +142,14 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
                 disabled={isResending}
                 className="text-sm font-medium text-primary hover:underline disabled:opacity-50"
               >
-                {isResending ? "იგზავნება..." : "კოდის ხელახლა გაგზავნა"}
+                {isResending ? t.verification.resending : t.verification.resend}
               </button>
             </div>
           </div>
         ) : (
           <div className="pt-4">
             <Button variant="brand" size="lg" className="w-full" onClick={handleClose}>
-              გაგრძელება
+              {t.verification.continue}
             </Button>
           </div>
         )}

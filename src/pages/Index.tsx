@@ -2,6 +2,8 @@ import { useState } from "react";
 import { ActivationForm } from "@/components/ActivationForm";
 import { VerificationModal } from "@/components/VerificationModal";
 import { Footer } from "@/components/Footer";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 import logo from "@/assets/martev-logo.svg";
 
 interface FormData {
@@ -11,9 +13,10 @@ interface FormData {
   email: string;
 }
 
-const Index = () => {
+function IndexContent() {
   const [showVerification, setShowVerification] = useState(false);
   const [submittedData, setSubmittedData] = useState<FormData | null>(null);
+  const { t } = useLanguage();
 
   const handleFormSuccess = (data: FormData) => {
     setSubmittedData(data);
@@ -24,6 +27,11 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       {/* Hero Section with Dark Background */}
       <section className="relative flex-1 flex items-center justify-center overflow-hidden bg-secondary">
+        {/* Language Switcher */}
+        <div className="absolute top-4 right-4 z-20">
+          <LanguageSwitcher />
+        </div>
+
         {/* Background Pattern */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
@@ -41,11 +49,11 @@ const Index = () => {
                 className="mx-auto mb-8 h-14 w-auto"
               />
               <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-primary-foreground sm:text-4xl lg:text-5xl">
-                ტაქსის მძღოლებისთვის{" "}
-                <span className="text-primary">განსაკუთრებული ფასდაკლება</span>
+                {t.hero.title}{" "}
+                <span className="text-primary">{t.hero.titleHighlight}</span>
               </h1>
               <p className="text-lg text-primary-foreground/70">
-                დარეგისტრირდი და მიიღე ფასდაკლება EV დამუხტვაზე
+                {t.hero.subtitle}
               </p>
             </div>
 
@@ -65,7 +73,7 @@ const Index = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-primary-foreground/70 hover:text-primary transition-colors text-sm"
               >
-                დამატებითი ინფორმაციისთვის იხილეთ ჩვენი ვებ-გვერდი
+                {t.hero.websiteLink}
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
@@ -85,6 +93,14 @@ const Index = () => {
         phone={submittedData?.phone || ""}
       />
     </div>
+  );
+}
+
+const Index = () => {
+  return (
+    <LanguageProvider>
+      <IndexContent />
+    </LanguageProvider>
   );
 };
 

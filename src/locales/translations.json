@@ -1,0 +1,124 @@
+{
+  "ka": {
+    "hero": {
+      "title": "ტაქსის მძღოლებისთვის",
+      "titleHighlight": "განსაკუთრებული ფასდაკლება",
+      "subtitle": "დარეგისტრირდი და მიიღე ფასდაკლება EV დამუხტვაზე",
+      "websiteLink": "დამატებითი ინფორმაციისთვის იხილეთ ჩვენი ვებ-გვერდი"
+    },
+    "form": {
+      "firstName": "სახელი",
+      "lastName": "გვარი",
+      "phone": "ტელეფონის ნომერი",
+      "email": "ელ. ფოსტა",
+      "license": "მართვის მოწმობა",
+      "licenseUpload": "ატვირთეთ მართვის მოწმობა (მაქს. 10 MB)",
+      "submit": "რეგისტრაცია",
+      "submitting": "მიმდინარეობს...",
+      "required": "*",
+      "placeholders": {
+        "firstName": "გიორგი",
+        "lastName": "ბერიძე",
+        "phone": "+995 5XX XXX XXX",
+        "email": "example@email.com"
+      },
+      "errors": {
+        "firstNameRequired": "სახელი აუცილებელია",
+        "firstNameTooLong": "სახელი ძალიან გრძელია",
+        "lastNameRequired": "გვარი აუცილებელია",
+        "lastNameTooLong": "გვარი ძალიან გრძელია",
+        "phoneRequired": "ტელეფონის ნომერი აუცილებელია",
+        "phoneInvalid": "ტელეფონის ნომერი არასწორია",
+        "emailRequired": "ელ. ფოსტა აუცილებელია",
+        "emailInvalid": "გთხოვთ შეიყვანოთ სწორი ელ. ფოსტა",
+        "fileTooLarge": "ფაილის ზომა არ უნდა აღემატებოდეს 10 MB-ს",
+        "phoneExists": "ეს ტელეფონის ნომერი უკვე რეგისტრირებულია",
+        "emailExists": "ეს ელ. ფოსტა უკვე რეგისტრირებულია"
+      }
+    },
+    "verification": {
+      "title": "დაადასტურე ტელეფონი",
+      "titleSuccess": "ტელეფონი დადასტურებულია!",
+      "subtitle": "ვერიფიკაციის კოდი გაიგზავნა ნომერზე",
+      "subtitleSuccess": "თქვენი ტელეფონის ნომერი წარმატებით დადასტურდა.",
+      "codeError": "გთხოვთ შეიყვანოთ 6-ციფრიანი კოდი",
+      "incorrectCode": "კოდი არასწორია. გთხოვთ სცადოთ ხელახლა.",
+      "verifyFailed": "ვერიფიკაცია ვერ მოხერხდა. გთხოვთ სცადოთ ხელახლა.",
+      "resendFailed": "კოდის ხელახლა გაგზავნა ვერ მოხერხდა.",
+      "verify": "ნომრის დადასტურება",
+      "verifying": "მოწმდება...",
+      "resend": "კოდის ხელახლა გაგზავნა",
+      "resending": "იგზავნება...",
+      "continue": "გაგრძელება"
+    },
+    "footer": {
+      "description": "შენი გზა მარტEVია — ელექტროგასამართი სადგურების ინფრასტრუქტურა თბილისის მასშტაბით.",
+      "contact": "კონტაქტი",
+      "callUs": "დაგვიკავშირდით",
+      "downloadApp": "გადმოწერე აპლიკაცია",
+      "appDescription": "მარტEV აპლიკაცია ხელმისაწვდომია iOS და Android პლატფორმებზე.",
+      "copyright": "ყველა უფლება დაცულია."
+    }
+  },
+  "en": {
+    "hero": {
+      "title": "For Taxi Drivers",
+      "titleHighlight": "Special Discount",
+      "subtitle": "Register and get a discount on EV charging",
+      "websiteLink": "For more information, visit our website"
+    },
+    "form": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phone": "Phone Number",
+      "email": "Email",
+      "license": "Driver's License",
+      "licenseUpload": "Upload driver's license (max 10 MB)",
+      "submit": "Register",
+      "submitting": "Submitting...",
+      "required": "*",
+      "placeholders": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "phone": "+995 5XX XXX XXX",
+        "email": "example@email.com"
+      },
+      "errors": {
+        "firstNameRequired": "First name is required",
+        "firstNameTooLong": "First name is too long",
+        "lastNameRequired": "Last name is required",
+        "lastNameTooLong": "Last name is too long",
+        "phoneRequired": "Phone number is required",
+        "phoneInvalid": "Phone number is invalid",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email",
+        "fileTooLarge": "File size must not exceed 10 MB",
+        "phoneExists": "This phone number is already registered",
+        "emailExists": "This email is already registered"
+      }
+    },
+    "verification": {
+      "title": "Verify Your Phone",
+      "titleSuccess": "Phone Verified!",
+      "subtitle": "A verification code was sent to",
+      "subtitleSuccess": "Your phone number has been verified successfully.",
+      "codeError": "Please enter the 6-digit code",
+      "incorrectCode": "Incorrect verification code. Please try again.",
+      "verifyFailed": "Verification failed. Please try again.",
+      "resendFailed": "Failed to resend code. Please try again.",
+      "verify": "Verify Phone Number",
+      "verifying": "Verifying...",
+      "resend": "Resend Code",
+      "resending": "Resending...",
+      "continue": "Continue"
+    },
+    "footer": {
+      "description": "Your path is MartEV — EV charging station infrastructure across Tbilisi.",
+      "contact": "Contact",
+      "callUs": "Call Us",
+      "downloadApp": "Download App",
+      "appDescription": "MartEV app is available on iOS and Android platforms.",
+      "copyright": "All rights reserved."
+    }
+  }
+}

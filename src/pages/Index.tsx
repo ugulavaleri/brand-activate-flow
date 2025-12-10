@@ -21,38 +21,37 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      {/* Hero Section */}
-      <section className="relative flex-1 flex items-center justify-center overflow-hidden">
-        {/* Background Gradient Orbs */}
+    <div className="min-h-screen flex flex-col">
+      {/* Hero Section with Dark Background */}
+      <section className="relative flex-1 flex items-center justify-center overflow-hidden bg-secondary">
+        {/* Background Pattern */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -left-40 -top-40 h-96 w-96 rounded-full bg-primary/20 blur-3xl animate-float" />
-          <div className="absolute -right-40 top-1/4 h-80 w-80 rounded-full bg-brand-blue/20 blur-3xl animate-float" style={{ animationDelay: "2s" }} />
-          <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-accent/15 blur-3xl animate-float" style={{ animationDelay: "4s" }} />
+          <div className="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute -right-20 bottom-1/4 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
         </div>
 
-        <div className="container relative z-10 mx-auto px-6 py-12">
-          <div className="mx-auto max-w-xl">
+        <div className="container relative z-10 mx-auto px-6 py-16">
+          <div className="mx-auto max-w-lg">
             {/* Logo & Header */}
-            <div className="mb-8 text-center animate-fade-up">
+            <div className="mb-10 text-center animate-fade-up">
               <img
                 src={logo}
                 alt="MartEV Logo"
-                className="mx-auto mb-6 h-16 w-auto"
+                className="mx-auto mb-8 h-14 w-auto"
               />
-              <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-                Activate Your{" "}
-                <span className="gradient-text">MartEV</span>{" "}
-                Account
+              <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-primary-foreground sm:text-4xl lg:text-5xl">
+                ALWAYS GO{" "}
+                <span className="text-primary">GREEN</span>
               </h1>
-              <p className="text-lg text-muted-foreground">
-                Complete the form below to get started with your electric vehicle journey.
+              <p className="text-lg text-primary-foreground/70">
+                Activate your account to start charging
               </p>
             </div>
 
             {/* Form Card */}
             <div 
-              className="rounded-2xl border border-border/50 bg-card p-8 shadow-brand-lg animate-fade-up"
+              className="rounded-xl bg-card p-8 shadow-2xl animate-fade-up"
               style={{ animationDelay: "0.2s" }}
             >
               <ActivationForm onSubmitSuccess={handleFormSuccess} />

@@ -55,10 +55,9 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         brand: {
-          cyan: "hsl(181, 100%, 42%)",
-          blue: "hsl(195, 100%, 46%)",
-          deepBlue: "hsl(219, 100%, 50%)",
-          orange: "hsl(27, 88%, 59%)",
+          green: "hsl(142, 71%, 45%)",
+          lime: "hsl(84, 85%, 50%)",
+          dark: "hsl(220, 15%, 12%)",
         },
       },
       borderRadius: {

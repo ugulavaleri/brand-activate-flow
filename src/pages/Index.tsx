@@ -41,11 +41,11 @@ const Index = () => {
                 className="mx-auto mb-8 h-14 w-auto"
               />
               <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-primary-foreground sm:text-4xl lg:text-5xl">
-                ALWAYS GO{" "}
-                <span className="text-primary">GREEN</span>
+                ტაქსის მძღოლებისთვის{" "}
+                <span className="text-primary">განსაკუთრებული ფასდაკლება</span>
               </h1>
               <p className="text-lg text-primary-foreground/70">
-                Activate your account to start charging
+                დარეგისტრირდი და მიიღე ფასდაკლება EV დამუხტვაზე
               </p>
             </div>
 

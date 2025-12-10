@@ -11,13 +11,13 @@ import { cn } from "@/lib/utils";
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 const formSchema = z.object({
-  firstName: z.string().min(1, "First name is required").max(50, "First name is too long"),
-  lastName: z.string().min(1, "Last name is required").max(50, "Last name is too long"),
+  firstName: z.string().min(1, "სახელი აუცილებელია").max(50, "სახელი ძალიან გრძელია"),
+  lastName: z.string().min(1, "გვარი აუცილებელია").max(50, "გვარი ძალიან გრძელია"),
   phone: z
     .string()
-    .min(1, "Phone number is required")
-    .regex(/^[\d\s\+\-\(\)]+$/, "Phone number can only contain digits, +, -, (, ), and spaces"),
-  email: z.string().min(1, "Email is required").email("Please enter a valid email address"),
+    .min(1, "ტელეფონის ნომერი აუცილებელია")
+    .regex(/^[\d\s\+\-\(\)]+$/, "ტელეფონის ნომერი არასწორია"),
+  email: z.string().min(1, "ელ. ფოსტა აუცილებელია").email("გთხოვთ შეიყვანოთ სწორი ელ. ფოსტა"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -46,7 +46,7 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
 
     if (selectedFile) {
       if (selectedFile.size > MAX_FILE_SIZE) {
-        setFileError("File size must not exceed 10 MB");
+        setFileError("ფაილის ზომა არ უნდა აღემატებოდეს 10 MB-ს");
         setFile(null);
         return;
       }
@@ -93,13 +93,13 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
         {/* First Name */}
         <div className="space-y-2">
           <Label htmlFor="firstName" className="text-sm font-semibold text-foreground">
-            First Name *
+            სახელი *
           </Label>
           <div className="relative">
             <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="firstName"
-              placeholder="John"
+              placeholder="გიორგი"
               className="pl-11"
               error={!!errors.firstName}
               {...register("firstName")}
@@ -113,13 +113,13 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
         {/* Last Name */}
         <div className="space-y-2">
           <Label htmlFor="lastName" className="text-sm font-semibold text-foreground">
-            Last Name *
+            გვარი *
           </Label>
           <div className="relative">
             <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="lastName"
-              placeholder="Doe"
+              placeholder="ბერიძე"
               className="pl-11"
               error={!!errors.lastName}
               {...register("lastName")}
@@ -134,14 +134,14 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
       {/* Phone */}
       <div className="space-y-2">
         <Label htmlFor="phone" className="text-sm font-semibold text-foreground">
-          Phone Number *
+          ტელეფონის ნომერი *
         </Label>
         <div className="relative">
           <Phone className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             id="phone"
             type="tel"
-            placeholder="+1 (555) 123-4567"
+            placeholder="+995 5XX XXX XXX"
             className="pl-11"
             error={!!errors.phone || !!serverErrors.phone}
             {...register("phone")}
@@ -156,14 +156,14 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
       {/* Email */}
       <div className="space-y-2">
         <Label htmlFor="email" className="text-sm font-semibold text-foreground">
-          Email *
+          ელ. ფოსტა *
         </Label>
         <div className="relative">
           <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             id="email"
             type="email"
-            placeholder="john.doe@example.com"
+            placeholder="example@email.com"
             className="pl-11"
             error={!!errors.email || !!serverErrors.email}
             {...register("email")}
@@ -178,7 +178,7 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
       {/* License Upload */}
       <div className="space-y-2">
         <Label htmlFor="license" className="text-sm font-semibold text-foreground">
-          License Upload
+          მართვის მოწმობა
         </Label>
         <label
           htmlFor="license"
@@ -197,7 +197,7 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
             <>
               <Upload className="h-5 w-5 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">
-                Click to upload license (max 10 MB)
+                ატვირთეთ მართვის მოწმობა (მაქს. 10 MB)
               </span>
             </>
           )}
@@ -223,10 +223,10 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            Submitting...
+            მიმდინარეობს...
           </>
         ) : (
-          "Request Activation"
+          "რეგისტრაცია"
         )}
       </Button>
     </form>

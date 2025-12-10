@@ -14,7 +14,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { Loader2, CheckCircle2, Phone } from "lucide-react";
 
 const codeSchema = z.object({
-  code: z.string().length(6, "Please enter the 6-digit code"),
+  code: z.string().length(6, "გთხოვთ შეიყვანოთ 6-ციფრიანი კოდი"),
 });
 
 type CodeFormData = z.infer<typeof codeSchema>;
@@ -34,7 +34,7 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
 
   const handleVerify = async () => {
     if (code.length !== 6) {
-      setError("Please enter the 6-digit code");
+      setError("გთხოვთ შეიყვანოთ 6-ციფრიანი კოდი");
       return;
     }
 
@@ -54,10 +54,10 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
       if (code === "123456") {
         setIsVerified(true);
       } else {
-        setError("Incorrect verification code. Please try again.");
+        setError("კოდი არასწორია. გთხოვთ სცადოთ ხელახლა.");
       }
     } catch (err) {
-      setError("Verification failed. Please try again.");
+      setError("ვერიფიკაცია ვერ მოხერხდა. გთხოვთ სცადოთ ხელახლა.");
     } finally {
       setIsVerifying(false);
     }
@@ -74,7 +74,7 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setCode("");
     } catch (err) {
-      setError("Failed to resend code. Please try again.");
+      setError("კოდის ხელახლა გაგზავნა ვერ მოხერხდა.");
     } finally {
       setIsResending(false);
     }
@@ -91,7 +91,7 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full gradient-button shadow-brand-md">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary shadow-md">
             {isVerified ? (
               <CheckCircle2 className="h-8 w-8 text-primary-foreground" />
             ) : (
@@ -99,12 +99,12 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
             )}
           </div>
           <DialogTitle className="text-xl font-bold text-foreground">
-            {isVerified ? "Phone Verified!" : "Verify Your Phone"}
+            {isVerified ? "ტელეფონი დადასტურებულია!" : "დაადასტურე ტელეფონი"}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
             {isVerified
-              ? "Your phone number has been verified successfully."
-              : `We've sent a verification code to ${phone}`}
+              ? "თქვენი ტელეფონის ნომერი წარმატებით დადასტურდა."
+              : `ვერიფიკაციის კოდი გაიგზავნა ნომერზე ${phone}`}
           </DialogDescription>
         </DialogHeader>
 
@@ -145,10 +145,10 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
               {isVerifying ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Verifying...
+                  მოწმდება...
                 </>
               ) : (
-                "Verify Phone Number"
+                "ნომრის დადასტურება"
               )}
             </Button>
 
@@ -159,14 +159,14 @@ export function VerificationModal({ open, onOpenChange, phone }: VerificationMod
                 disabled={isResending}
                 className="text-sm font-medium text-primary hover:underline disabled:opacity-50"
               >
-                {isResending ? "Resending..." : "Resend Code"}
+                {isResending ? "იგზავნება..." : "კოდის ხელახლა გაგზავნა"}
               </button>
             </div>
           </div>
         ) : (
           <div className="pt-4">
             <Button variant="brand" size="lg" className="w-full" onClick={handleClose}>
-              Continue
+              გაგრძელება
             </Button>
           </div>
         )}

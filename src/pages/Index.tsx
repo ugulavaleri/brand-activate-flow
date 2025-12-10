@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ActivationForm } from "@/components/ActivationForm";
 import { VerificationModal } from "@/components/VerificationModal";
 import { Footer } from "@/components/Footer";
-import logo from "@/assets/martev-logo-color.png";
+import logo from "@/assets/martev-logo.svg";
 
 interface FormData {
   firstName: string;

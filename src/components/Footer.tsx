@@ -1,21 +1,21 @@
 import { Mail, Phone, MapPin } from "lucide-react";
-import logo from "@/assets/martev-logo-color.png";
+import logo from "@/assets/martev-logo.svg";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-muted/30">
+    <footer className="border-t border-primary/20 bg-gradient-to-b from-background to-muted/50">
       <div className="container mx-auto px-6 py-12">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 md:grid-cols-2">
           {/* Company Info */}
           <div className="space-y-4">
-            <img src={logo} alt="MartEV Logo" className="h-12 w-auto" />
+            <img src={logo} alt="MartEV Logo" className="h-10 w-auto" />
             <p className="text-sm text-muted-foreground">
               Electric vehicle solutions for a sustainable future.
             </p>
           </div>
 
           {/* Contact Information */}
-          <div className="space-y-4 lg:col-span-2">
+          <div className="space-y-4">
             <h3 className="font-bold text-foreground">Contact Us</h3>
             <div className="space-y-3">
               <div className="flex items-start gap-3">
@@ -45,11 +45,10 @@ export function Footer() {
               </div>
             </div>
           </div>
-
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 border-t border-border pt-6">
+        <div className="mt-12 border-t border-primary/20 pt-6">
           <p className="text-center text-sm text-muted-foreground">
             © {new Date().getFullYear()} MartEV. All rights reserved.
           </p>

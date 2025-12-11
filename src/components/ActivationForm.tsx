@@ -14,6 +14,7 @@ interface FormInputs {
   lastName: string;
   phone: string;
   email: string;
+  categoryId: string;
 }
 
 interface ActivationFormProps {
@@ -25,7 +26,13 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [serverErrors, setServerErrors] = useState<{ phone?: string; email?: string }>({});
+  const [serverErrors, setServerErrors] = useState<{
+    phone?: string;
+    email?: string;
+    license_file?: string;
+    category_id?: string;
+    general?: string;
+  }>({});
 
   const {
     register,
@@ -53,18 +60,50 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
 
     try {
       const formData = new FormData();
-      formData.append("firstName", data.firstName);
-      formData.append("lastName", data.lastName);
-      formData.append("phone", data.phone);
+      formData.append("name", data.firstName);
+      formData.append("surname", data.lastName);
+      formData.append("phone", data.phone.replace(/\s+/g, ""));
       formData.append("email", data.email);
-      if (file) {
-        formData.append("license", file);
+      formData.append("category_id", data.categoryId);
+
+      if (!file) {
+        setFileError("License file is required");
+        setIsSubmitting(false);
+        return;
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      formData.append("license_file", file);
+
+      const response = await fetch(
+        "https://martevio.on-forge.com/api/user/create-driver",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        if (response.status === 422) {
+          const body = await response.json();
+          const errors = body?.errors ?? {};
+
+          setServerErrors({
+            phone: errors.phone?.[0],
+            email: errors.email?.[0],
+            license_file: errors.license_file?.[0],
+            category_id: errors.category_id?.[0],
+            general: body?.message,
+          });
+        } else {
+          setServerErrors({ general: "Server error. Please try again." });
+        }
+        return;
+      }
+
       onSubmitSuccess(data);
     } catch (error) {
       console.error("Submission error:", error);
+      setServerErrors({ general: "Unexpected error. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
@@ -75,7 +114,10 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
       <div className="grid gap-5 sm:grid-cols-2">
         {/* First Name */}
         <div className="space-y-2">
-          <Label htmlFor="firstName" className="text-sm font-medium text-slate-300">
+          <Label
+            htmlFor="firstName"
+            className="text-sm font-medium text-slate-300"
+          >
             {t.form.firstName} {t.form.required}
           </Label>
           <div className="relative">
@@ -84,7 +126,9 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
               id="firstName"
               placeholder={t.form.placeholders.firstName}
               className="pl-11 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-emerald-500/50 focus:ring-emerald-500/20"
-              {...register("firstName", { required: t.form.errors.firstNameRequired })}
+              {...register("firstName", {
+                required: t.form.errors.firstNameRequired,
+              })}
             />
           </div>
           {errors.firstName && (
@@ -94,7 +138,10 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
 
         {/* Last Name */}
         <div className="space-y-2">
-          <Label htmlFor="lastName" className="text-sm font-medium text-slate-300">
+          <Label
+            htmlFor="lastName"
+            className="text-sm font-medium text-slate-300"
+          >
             {t.form.lastName} {t.form.required}
           </Label>
           <div className="relative">
@@ -103,7 +150,9 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
               id="lastName"
               placeholder={t.form.placeholders.lastName}
               className="pl-11 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-emerald-500/50 focus:ring-emerald-500/20"
-              {...register("lastName", { required: t.form.errors.lastNameRequired })}
+              {...register("lastName", {
+                required: t.form.errors.lastNameRequired,
+              })}
             />
           </div>
           {errors.lastName && (
@@ -127,8 +176,12 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
             {...register("phone", { required: t.form.errors.phoneRequired })}
           />
         </div>
-        {errors.phone && <p className="text-sm text-red-400">{errors.phone.message}</p>}
-        {serverErrors.phone && <p className="text-sm text-red-400">{serverErrors.phone}</p>}
+        {errors.phone && (
+          <p className="text-sm text-red-400">{errors.phone.message}</p>
+        )}
+        {serverErrors.phone && (
+          <p className="text-sm text-red-400">{serverErrors.phone}</p>
+        )}
       </div>
 
       {/* Email */}
@@ -146,8 +199,12 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
             {...register("email", { required: t.form.errors.emailRequired })}
           />
         </div>
-        {errors.email && <p className="text-sm text-red-400">{errors.email.message}</p>}
-        {serverErrors.email && <p className="text-sm text-red-400">{serverErrors.email}</p>}
+        {errors.email && (
+          <p className="text-sm text-red-400">{errors.email.message}</p>
+        )}
+        {serverErrors.email && (
+          <p className="text-sm text-red-400">{serverErrors.email}</p>
+        )}
       </div>
 
       {/* License Upload */}
@@ -167,7 +224,9 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
           {file ? (
             <>
               <CheckCircle className="h-5 w-5 text-emerald-400" />
-              <span className="text-sm font-medium text-white">{file.name}</span>
+              <span className="text-sm font-medium text-white">
+                {file.name}
+              </span>
             </>
           ) : (
             <>
@@ -187,6 +246,38 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
         </label>
         {fileError && <p className="text-sm text-red-400">{fileError}</p>}
       </div>
+
+      {/* Category ID */}
+      <div className="space-y-2">
+        <Label
+          htmlFor="categoryId"
+          className="text-sm font-medium text-slate-300"
+        >
+          Category ID {t.form.required}
+        </Label>
+        <Input
+          id="categoryId"
+          type="text"
+          placeholder="Enter category ID"
+          className="bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-emerald-500/50 focus:ring-emerald-500/20"
+          {...register("categoryId", {
+            required: "Category is required",
+          })}
+        />
+        {errors.categoryId && (
+          <p className="text-sm text-red-400">{errors.categoryId.message}</p>
+        )}
+        {serverErrors.category_id && (
+          <p className="text-sm text-red-400">{serverErrors.category_id}</p>
+        )}
+      </div>
+
+      {serverErrors.license_file && (
+        <p className="text-sm text-red-400">{serverErrors.license_file}</p>
+      )}
+      {serverErrors.general && (
+        <p className="text-sm text-red-400">{serverErrors.general}</p>
+      )}
 
       {/* Submit Button */}
       <Button

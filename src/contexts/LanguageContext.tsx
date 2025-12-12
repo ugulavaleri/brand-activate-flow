@@ -28,6 +28,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   });
   const [remoteTranslations, setRemoteTranslations] =
     useState<Translations | null>(null);
+  const [isLoadingTranslations, setIsLoadingTranslations] = useState(true);
 
   useEffect(() => {
     localStorage.setItem("martev-language", language);
@@ -35,6 +36,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const loadTranslations = async () => {
+      setIsLoadingTranslations(true);
       try {
         const res = await fetch(`${API_BASE}/languages`);
         if (!res.ok) {
@@ -44,6 +46,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         setRemoteTranslations(data);
       } catch (error) {
         console.error("Translation fetch error:", error);
+      } finally {
+        setIsLoadingTranslations(false);
       }
     };
 
@@ -52,6 +56,18 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const activeTranslations = remoteTranslations || translations;
   const t = activeTranslations[language] || translations[language];
+
+  // Show loader while fetching translations
+  if (isLoadingTranslations) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0B1120]">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-emerald-500 border-r-transparent"></div>
+          {/* <p className="mt-4 text-slate-400">Loading translations...</p> */}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>

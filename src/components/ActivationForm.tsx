@@ -68,7 +68,8 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
           throw new Error("Failed to load categories");
         }
         const data = await res.json();
-        setCategories(Array.isArray(data) ? data : []);
+        const categoriesList = Array.isArray(data) ? data : [];
+        setCategories(categoriesList);
       } catch (err) {
         console.error("Category fetch error:", err);
         setCategoryError("ვერ ჩაიტვირთა კატეგორიები");
@@ -84,6 +85,15 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
   }, [toast]);
 
   const selectedCategory = watch("categoryId");
+
+  // Set default to first category (Standard) when categories are loaded
+  useEffect(() => {
+    if (categories.length > 0 && !selectedCategory) {
+      setValue("categoryId", String(categories[0].id), {
+        shouldValidate: false,
+      });
+    }
+  }, [categories, selectedCategory, setValue]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -327,13 +337,7 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
           disabled={isLoadingCategories}
         >
           <SelectTrigger className="bg-white/5 border-white/10 text-white">
-            <SelectValue
-              placeholder={
-                isLoadingCategories
-                  ? "Loading categories..."
-                  : "Select category"
-              }
-            />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent className="bg-[#0f1520] text-white border-white/10">
             {categories.map((cat) => (

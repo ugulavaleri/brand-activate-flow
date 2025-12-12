@@ -126,18 +126,18 @@ function IndexContent() {
               />
 
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
+              {/* <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="text-sm font-medium text-emerald-400">
                   MartEV
                 </span>
-              </div>
+              </div> */}
 
               {/* Hero Title */}
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-4 leading-tight">
+              <h1 className="text-[40px] sm:text-[40px] font-extrabold text-white mb-4 leading-tight">
                 {t.hero.title}
               </h1>
-              <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-6">
+              <h2 className="text-[27px] sm:text-[27px] font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-6">
                 {t.hero.titleHighlight}
               </h2>
 

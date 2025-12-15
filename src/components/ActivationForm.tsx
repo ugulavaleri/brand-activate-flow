@@ -8,15 +8,9 @@ import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/components/ui/use-toast";
 import { API_BASE } from "@/lib/api";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const DEFAULT_CATEGORY_ID = "1"; // Standard
 
 interface FormInputs {
   firstName: string;
@@ -48,52 +42,12 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
-    watch,
-  } = useForm<FormInputs>();
+  } = useForm<FormInputs>({
+    defaultValues: {
+      categoryId: DEFAULT_CATEGORY_ID,
+    },
+  });
   const { toast } = useToast();
-  const [categories, setCategories] = useState<{ id: number; name: string }[]>(
-    []
-  );
-  const [isLoadingCategories, setIsLoadingCategories] = useState(false);
-  const [categoryError, setCategoryError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      setIsLoadingCategories(true);
-      setCategoryError(null);
-      try {
-        const res = await fetch(`${API_BASE}/categories`);
-        if (!res.ok) {
-          throw new Error("Failed to load categories");
-        }
-        const data = await res.json();
-        const categoriesList = Array.isArray(data) ? data : [];
-        setCategories(categoriesList);
-      } catch (err) {
-        console.error("Category fetch error:", err);
-        setCategoryError("ვერ ჩაიტვირთა კატეგორიები");
-        toast({
-          variant: "destructive",
-          description: "Unable to load categories. Please try again.",
-        });
-      } finally {
-        setIsLoadingCategories(false);
-      }
-    };
-    fetchCategories();
-  }, [toast]);
-
-  const selectedCategory = watch("categoryId");
-
-  // Set default to first category (Standard) when categories are loaded
-  useEffect(() => {
-    if (categories.length > 0 && !selectedCategory) {
-      setValue("categoryId", String(categories[0].id), {
-        shouldValidate: false,
-      });
-    }
-  }, [categories, selectedCategory, setValue]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -316,47 +270,12 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
         {fileError && <p className="text-sm text-red-400">{fileError}</p>}
       </div>
 
-      {/* Category ID */}
-      <div className="space-y-2">
-        <Label
-          htmlFor="categoryId"
-          className="text-sm font-medium text-slate-300"
-        >
-          Category {t.form.required}
-        </Label>
-        <input
-          type="hidden"
-          {...register("categoryId", { required: "Category is required" })}
-        />
-        <Select
-          value={selectedCategory}
-          onValueChange={(value) => {
-            setValue("categoryId", value, { shouldValidate: true });
-            setServerErrors((prev) => ({ ...prev, category_id: undefined }));
-          }}
-          disabled={isLoadingCategories}
-        >
-          <SelectTrigger className="bg-white/5 border-white/10 text-white">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-[#0f1520] text-white border-white/10">
-            {categories.map((cat) => (
-              <SelectItem key={cat.id} value={String(cat.id)}>
-                {cat.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.categoryId && (
-          <p className="text-sm text-red-400">{errors.categoryId.message}</p>
-        )}
-        {serverErrors.category_id && (
-          <p className="text-sm text-red-400">{serverErrors.category_id}</p>
-        )}
-        {categoryError && (
-          <p className="text-sm text-red-400">{categoryError}</p>
-        )}
-      </div>
+      <input
+        type="hidden"
+        {...register("categoryId", { required: "Category is required" })}
+        value={DEFAULT_CATEGORY_ID}
+        readOnly
+      />
 
       {serverErrors.license_file && (
         <p className="text-sm text-red-400">{serverErrors.license_file}</p>

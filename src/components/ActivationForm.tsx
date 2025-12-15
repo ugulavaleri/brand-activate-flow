@@ -10,7 +10,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { API_BASE } from "@/lib/api";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const DEFAULT_CATEGORY_ID = "1"; // Standard
+const DEFAULT_CATEGORY_ID = "1"; // fallback Standard
 
 interface FormInputs {
   firstName: string;
@@ -42,12 +42,42 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<FormInputs>({
     defaultValues: {
       categoryId: DEFAULT_CATEGORY_ID,
     },
   });
   const { toast } = useToast();
+  const [defaultCategoryId, setDefaultCategoryId] =
+    useState<string>(DEFAULT_CATEGORY_ID);
+
+  // Load categories and pick backend default (is_default === true), falling back to first or hardcoded
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/categories`);
+        if (!res.ok) {
+          throw new Error("Failed to load categories");
+        }
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : [];
+        if (list.length === 0) return;
+
+        const backendDefault =
+          list.find((cat: any) => cat.is_default) ?? list[0];
+        if (!backendDefault) return;
+
+        const idStr = String(backendDefault.id);
+        setDefaultCategoryId(idStr);
+        setValue("categoryId", idStr, { shouldValidate: false });
+      } catch (err) {
+        console.error("Category load error:", err);
+      }
+    };
+
+    loadCategories();
+  }, [setValue]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -116,6 +146,7 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
       });
 
       reset();
+      setValue("categoryId", defaultCategoryId, { shouldValidate: false });
       setFile(null);
       setFileError(null);
       setServerErrors({});
@@ -273,8 +304,6 @@ export function ActivationForm({ onSubmitSuccess }: ActivationFormProps) {
       <input
         type="hidden"
         {...register("categoryId", { required: "Category is required" })}
-        value={DEFAULT_CATEGORY_ID}
-        readOnly
       />
 
       {serverErrors.license_file && (
